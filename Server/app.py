@@ -55,7 +55,7 @@ def load_saved_artifacts():
 
 # ================== Flask App ==================
 
-app = Flask(__name__, template_folder='Client/templates', static_folder='Client')
+app = Flask(__name__, template_folder='Client', static_folder='Client')
 
 @app.route('/')
 def home():
