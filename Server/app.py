@@ -34,14 +34,14 @@ def load_saved_artifacts():
     global __locations
     global __model
 
-    # Relative path (safe for Render deployment)
+    # Path to artifacts directory
     artifacts_dir = os.path.join(os.path.dirname(__file__), 'artifacts')
 
     columns_file = os.path.join(artifacts_dir, "columns.json")
     model_file = os.path.join(artifacts_dir, "banglore_home_prices_model.pickle")
 
     if not os.path.exists(columns_file) or not os.path.exists(model_file):
-        print("Required artifact files not found.")
+        print("Error: Required artifact files not found in:", artifacts_dir)
         return
 
     with open(columns_file, "r") as f:
@@ -55,7 +55,10 @@ def load_saved_artifacts():
 
 # ================== Flask App ==================
 
-app = Flask(__name__, template_folder='Client', static_folder='Client')
+# Updated paths to match your directory structure
+app = Flask(__name__, 
+            template_folder='Client/templates',
+            static_folder='Client/static')
 
 @app.route('/')
 def home():
@@ -91,5 +94,6 @@ def predict_home_price():
 if __name__ == "__main__":
     print("Starting Python Flask Server For Home Price Prediction...")
     load_saved_artifacts()
+    if __model is None:
+        print("Warning: Model failed to load. Check artifact files.")
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
-
